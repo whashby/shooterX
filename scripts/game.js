@@ -789,6 +789,11 @@ document.getElementById("newGameButton").addEventListener("click", resetGame);
 document.addEventListener("click", function () {
     isPaused = !isPaused;
 
+});
+
+
+document.addEventListener("click", function () {
+
     if (isPaused || gameOver) {
         document.body.style.cursor = "auto"; // Show cursor when paused or game over
     } else {
