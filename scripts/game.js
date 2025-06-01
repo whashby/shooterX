@@ -42,6 +42,7 @@ let score = 0;
 let lastShotTime = 0;
 const baseFireInterval = 500;
 let currentFireInterval = baseFireInterval;
+let isPaused = false;
 
 const enemies = [];
 const enemyBullets = [];
@@ -784,6 +785,9 @@ function resetGame() {
 
 document.getElementById("newGameButton").addEventListener("click", resetGame);
 
+document.addEventListener("click", function () {
+    isPaused = !isPaused;
+});
 // =======================================================
 // Main Game Loop
 // =======================================================
@@ -795,6 +799,10 @@ function update(timestamp) {
     if (gameOver) {
         drawGameOver();
         return;
+    }
+
+    if (isPaused) {
+        return; // Stop updating when paused
     }
 
     // Draw the player ship.

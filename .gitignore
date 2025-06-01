@@ -7,3 +7,5 @@ _notes/
 /.vs
 /index.old.html
 /shooterX.txt
+*.txt
+/*.old.*
