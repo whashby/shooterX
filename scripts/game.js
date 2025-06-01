@@ -42,7 +42,6 @@ let score = 0;
 let lastShotTime = 0;
 const baseFireInterval = 500;
 let currentFireInterval = baseFireInterval;
-let isPaused = false;
 
 const enemies = [];
 const enemyBullets = [];
@@ -786,20 +785,6 @@ function resetGame() {
 
 document.getElementById("newGameButton").addEventListener("click", resetGame);
 
-document.addEventListener("click", function () {
-    isPaused = !isPaused;
-
-});
-
-
-document.addEventListener("click", function () {
-
-    if (isPaused || gameOver) {
-        document.body.style.cursor = "auto"; // Show cursor when paused or game over
-    } else {
-        document.body.style.cursor = "none"; // Hide cursor when game is active
-    }
-});
 
 
 // =======================================================
@@ -813,13 +798,6 @@ function update(timestamp) {
     if (gameOver) {
         drawGameOver();
         return;
-    }
-
-    if (isPaused) {
-        return; // Stop updating when paused
-    }
-    else {
-        update(timestamp); // Continue updating if not paused)
     }
 
     // Draw the player ship.
