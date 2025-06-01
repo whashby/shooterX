@@ -818,6 +818,9 @@ function update(timestamp) {
     if (isPaused) {
         return; // Stop updating when paused
     }
+    else {
+        update(timestamp); // Continue updating if not paused)
+    }
 
     // Draw the player ship.
     ctx.drawImage(playerShipImage, player.x, player.y, player.width, player.height);
