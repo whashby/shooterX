@@ -788,7 +788,15 @@ document.getElementById("newGameButton").addEventListener("click", resetGame);
 
 document.addEventListener("click", function () {
     isPaused = !isPaused;
+
+    if (isPaused || gameOver) {
+        document.body.style.cursor = "auto"; // Show cursor when paused or game over
+    } else {
+        document.body.style.cursor = "none"; // Hide cursor when game is active
+    }
 });
+
+
 // =======================================================
 // Main Game Loop
 // =======================================================
