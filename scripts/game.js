@@ -783,6 +783,7 @@ function resetGame() {
     requestAnimationFrame(update);
 }
 
+
 document.getElementById("newGameButton").addEventListener("click", resetGame);
 
 document.addEventListener("click", function () {
