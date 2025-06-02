@@ -11,6 +11,7 @@
             background-color: #f0f0f0;
             /* Using a retro web font. You might need to include a link to Google Fonts if not installed locally */
             font-family: 'Press Start 2P', sans-serif;
+            cursor: none;
         }
 
         canvas {
@@ -24,6 +25,7 @@
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 20px;
+            pointer-events: none;
         }
 
         #scoreboard {
@@ -47,6 +49,15 @@
             top: 10px;
             right: 10px;
         }
+
+        #info {
+            position: absolute;
+            top: 45px;
+            right: 50px;
+            color: rgba(255,255,255,0.7);
+            font-style: italic;
+            font-size: 12px;
+        }
         /* New Game Button */
         #newGameButton {
             position: absolute;
@@ -54,7 +65,7 @@
             top: 63%;
             transform: translate(-50%, -50%);
             font-size: 40px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(255,0,0,0.4);
             color: white;
             border: none;
             border-radius: 10px;
@@ -69,7 +80,10 @@
     <div id="scoreboard">Score: 0</div>
     <div id="healthbar">❤️ ❤️ ❤️</div>
     <div id="powerupBar">Power: □ □ □ □ □ □</div>
-    <div id="specialBar">Specials: ☆ ☆ ☆</div>
+    <div>
+        <div id="specialBar">Specials: ☆ ☆ ☆ </div>
+        <div id="info">Spacebar to activate</div>
+    </div>
     <button id="newGameButton">New Game</button>
     <script type="text/javascript" src="scripts/game.js"></script>
 </body>
