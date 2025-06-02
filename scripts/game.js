@@ -112,7 +112,7 @@ const player = {
     x: 50,
     y: canvas.height / 2,
     width: 50,
-    height: 30,
+    height: 35,
     powerStage: 0,
     bullets: [],
     specialCount: 0
@@ -285,7 +285,7 @@ function updateSpecialRings() {
 // Enemy Spawning Functions
 // =======================================================
 function spawnAsteroid() {
-    const sizes = { 1: 20, 2: 35, 3: 50 };
+    const sizes = { 1: 30, 2: 40, 3: 50 };
     const index = Math.floor(Math.random() * 3) + 1;
     const size = sizes[index];
     const speed = Math.floor(Math.random() * 5 + 1);
@@ -617,6 +617,7 @@ function processLifeLoss() {
 function updateScore() {
     document.getElementById("scoreboard").innerText = "Score: " + score;
 }
+
 function updateHealthbar() {
     const healthbar = document.getElementById("healthbar");
     let hearts = "";
@@ -628,6 +629,7 @@ function updateHealthbar() {
         .split(" ")
         .join("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 }
+
 function updatePowerupBar() {
     const powerupBar = document.getElementById("powerupBar");
     let display = "";
@@ -637,6 +639,7 @@ function updatePowerupBar() {
     }
     powerupBar.innerHTML = "Power: " + display;
 }
+
 function updateSpecialBar() {
     const specialBar = document.getElementById("specialBar");
     let display = "";
@@ -680,6 +683,7 @@ function updatePowerUps() {
         if (p.x + p.size < 0) powerUps.splice(i, 1);
     });
 }
+
 function spawnSpecialPowerUp() {
     const size = 20;
     specialPowerUps.push({
@@ -689,6 +693,7 @@ function spawnSpecialPowerUp() {
         speed: 2
     });
 }
+
 function updateSpecialPowerUps() {
     for (let i = specialPowerUps.length - 1; i >= 0; i--) {
         const sp = specialPowerUps[i];
@@ -710,6 +715,7 @@ function updateSpecialPowerUps() {
         if (sp.x + sp.size < 0) specialPowerUps.splice(i, 1);
     });
 }
+
 function spawnHealthRefill() {
     const size = 20;
     healthRefills.push({
@@ -719,6 +725,7 @@ function spawnHealthRefill() {
         speed: 2
     });
 }
+
 function updateHealthRefills() {
     for (let i = healthRefills.length - 1; i >= 0; i--) {
         const r = healthRefills[i];
@@ -746,6 +753,7 @@ function updateHealthRefills() {
 // Game Over Screen and New Game Button
 // =======================================================
 function drawGameOver() {
+    document.body.style.cursor = "auto";
     ctx.fillStyle = "rgba(0,0,0,0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "red";
@@ -775,6 +783,7 @@ function resetGame() {
     lastBossSpawn = 0;
     gameOver = false;
     document.getElementById("newGameButton").style.display = "none";
+    document.body.style.cursor = "none";
     updateHealthbar();
     updateScore();
     updatePowerupBar();
