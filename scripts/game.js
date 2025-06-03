@@ -50,6 +50,8 @@ const specialPowerUps = [];
 const healthRefills = [];
 const specialRings = [];
 
+let isPaused = false;
+
 // =======================================================
 // Starry Background Setup (Space Environment)
 // =======================================================
@@ -765,6 +767,22 @@ function drawGameOver() {
     document.getElementById("newGameButton").style.display = "block";
 }
 
+// =======================================================
+// Pause Screen and Resume Game Button
+// =======================================================
+function drawPaused() {
+    document.body.style.cursor = "auto";
+    ctx.fillStyle = "rgba(0,0,0,0.7)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "red";
+    ctx.textAlign = "center";
+    ctx.font = "bold 80px 'Press Start 2P', sans-serif";
+    ctx.fillText("GAME PAUSED", canvas.width / 2, canvas.height / 2 - 40);
+    ctx.font = "bold 40px 'Press Start 2P', sans-serif";
+    ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
+    document.getElementById("resumeGameButton").style.display = "block";
+}
+
 function resetGame() {
     lives = 5;
     score = 0;
@@ -795,78 +813,102 @@ function resetGame() {
 document.getElementById("newGameButton").addEventListener("click", resetGame);
 
 
+document.getElementById("resumeGameButton").addEventListener("click", () => {
+    isPaused = !isPaused;
+    document.getElementById("resumeGameButton").style.display = "none";
+    document.body.style.cursor = "none";
+    requestAnimationFrame(update);
+});
+
+
 
 // =======================================================
 // Main Game Loop
 // =======================================================
 function update(timestamp) {
-    // Clear the canvas, then draw the starry background
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawStarryBackground();
+        // Clear the canvas, then draw the starry background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawStarryBackground();
 
-    if (gameOver) {
-        drawGameOver();
-        return;
-    }
+        if (isPaused) {
+            drawPaused();
+            return;
+        }
 
-    // Draw the player ship.
-    ctx.drawImage(playerShipImage, player.x, player.y, player.width, player.height);
+        if (gameOver) {
+            drawGameOver();
+            return;
+        }
 
-    if (!lastShotTime) lastShotTime = timestamp;
-    if (timestamp - lastShotTime > currentFireInterval) {
-        shoot();
-        lastShotTime = timestamp;
-    }
+        // Draw the player ship.
+        ctx.drawImage(playerShipImage, player.x, player.y, player.width, player.height);
 
-    updateBullets();
-    updateEnemyBullets();
-    updateEnemies(timestamp);
-    updatePowerUps();
-    updateSpecialPowerUps();
-    updateHealthRefills();
-    updateSpecialRings();
-    checkBulletCollisions();
+        if (!lastShotTime) lastShotTime = timestamp;
+        if (timestamp - lastShotTime > currentFireInterval) {
+            shoot();
+            lastShotTime = timestamp;
+        }
 
-    let asteroidSpawnInterval = Math.max(300, 1000 - player.powerStage * 100);
-    if (timestamp - lastAsteroidSpawn > asteroidSpawnInterval) {
-        spawnAsteroid();
-        lastAsteroidSpawn = timestamp;
-    }
-    let shipSpawnInterval = Math.max(2000, 5000 - player.powerStage * 500);
-    if (timestamp - lastShipSpawn > shipSpawnInterval) {
-        spawnEnemyShip();
-        lastShipSpawn = timestamp;
-    }
-    const specialSpawnInterval = 15000;
-    if (timestamp - lastSpecialPowerUpSpawn > specialSpawnInterval) {
-        spawnSpecialPowerUp();
-        lastSpecialPowerUpSpawn = timestamp;
-    }
-    const powerUpSpawnInterval = 7000;
-    if (timestamp - lastPowerUpSpawn > powerUpSpawnInterval && player.powerStage <= 3) {
-        spawnPowerUp();
-        lastPowerUpSpawn = timestamp;
-    }
-    const healthRefillSpawnInterval = 10000;
-    if (timestamp - lastHealthRefillSpawn > healthRefillSpawnInterval && lives < maxLives) {
-        spawnHealthRefill();
-        lastHealthRefillSpawn = timestamp;
-    }
-    // Boss respawn: if score >= 30 and enough time passed and no boss exists.
-    if (score >= 30 && (timestamp - lastBossSpawn > bossSpawnInterval) && !enemies.some(e => e.isBoss)) {
-        spawnBossShip();
-        lastBossSpawn = timestamp;
-    }
+        updateBullets();
+        updateEnemyBullets();
+        updateEnemies(timestamp);
+        updatePowerUps();
+        updateSpecialPowerUps();
+        updateHealthRefills();
+        updateSpecialRings();
+        checkBulletCollisions();
 
-    updateScore();
-    updatePowerupBar();
-    updateSpecialBar();
+        let asteroidSpawnInterval = Math.max(300, 1000 - player.powerStage * 100);
+        if (timestamp - lastAsteroidSpawn > asteroidSpawnInterval) {
+            spawnAsteroid();
+            lastAsteroidSpawn = timestamp;
+        }
+        let shipSpawnInterval = Math.max(2000, 5000 - player.powerStage * 500);
+        if (timestamp - lastShipSpawn > shipSpawnInterval) {
+            spawnEnemyShip();
+            lastShipSpawn = timestamp;
+        }
+        const specialSpawnInterval = 15000;
+        if (timestamp - lastSpecialPowerUpSpawn > specialSpawnInterval) {
+            spawnSpecialPowerUp();
+            lastSpecialPowerUpSpawn = timestamp;
+        }
+        const powerUpSpawnInterval = 7000;
+        if (timestamp - lastPowerUpSpawn > powerUpSpawnInterval && player.powerStage <= 3) {
+            spawnPowerUp();
+            lastPowerUpSpawn = timestamp;
+        }
+        const healthRefillSpawnInterval = 10000;
+        if (timestamp - lastHealthRefillSpawn > healthRefillSpawnInterval && lives < maxLives) {
+            spawnHealthRefill();
+            lastHealthRefillSpawn = timestamp;
+        }
+        // Boss respawn: if score >= 30 and enough time passed and no boss exists.
+        if (score >= 30 && (timestamp - lastBossSpawn > bossSpawnInterval) && !enemies.some(e => e.isBoss)) {
+            spawnBossShip();
+            lastBossSpawn = timestamp;
+        }
 
-    requestAnimationFrame(update);
+        updateScore();
+        updatePowerupBar();
+        updateSpecialBar();
+
+        requestAnimationFrame(update);
+
 }
+
+document.addEventListener("keydown", e => {
+    if (e.code === "Escape") {
+        isPaused = !isPaused;
+        document.body.style.cursor = isPaused ? "auto" : "none";
+    }
+});
 
 updateHealthbar();
 updateScore();
 updatePowerupBar();
 updateSpecialBar();
-requestAnimationFrame(update);
+
+if (!isPaused) { // Pause the game loop if paused
+    requestAnimationFrame(update);
+}
